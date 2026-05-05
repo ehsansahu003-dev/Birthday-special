@@ -1,0 +1,736 @@
+<!birthday html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffe0f0 0%, #ffc2d4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: #333;
+        }
+
+        /* Heart Rain */
+        .heart {
+            position: fixed;
+            font-size: 10px;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.9;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            color: #ffd700;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1;
+            animation: sparkle-float 6s ease-in-out infinite;
+        }
+
+        @keyframes sparkle-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+        }
+
+        /* Page Container */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ff69b4;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
+            transition: all 0.3s ease;
+            margin: 10px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.5);
+            background: #fff;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            color: #ff1493;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: #ff69b4;
+            margin-bottom: 30px;
+        }
+
+        /* Page 1 - Welcome */
+        .pulsing-heart {
+            font-size: 8rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Page 2 - Countdown */
+        .counter {
+            font-size: 3rem;
+            font-weight: 600;
+            color: #ff1493;
+            margin: 10px 0;
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes countUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff69b4;
+            animation: confetti-fall 3s linear infinite;
+            z-index: 50;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Page 3 - Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .gallery-item {
+            height: 200px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 105, 180, 0.4);
+        }
+
+        .gallery-item::before {
+            content: '📸';
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        /* Page 4 - Reasons */
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .reason-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transform: rotateY(90deg);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+
+        .reason-card.flipped {
+            transform: rotateY(0deg);
+        }
+
+        .reason-card::before {
+            content: '💝';
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* Page 5 - Letter */
+        .letter-container {
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border: 3px solid rgba(255, 105, 180, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            height: 40px;
+            background: linear-gradient(90deg, #ff69b4, #ffb6c1, #ff69b4);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .letter-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #444;
+            position: relative;
+        }
+
+        .letter-text::after {
+            content: '|';
+            animation: typewriter 4s steps(40) infinite;
+        }
+
+        @keyframes typewriter {
+            0%, 90% { opacity: 1; }
+            95%, 100% { opacity: 0; }
+        }
+
+        /* Page 6 - Wishes Jar */
+        .jar {
+            width: 250px;
+            height: 350px;
+            background: linear-gradient(145deg, #e8f4fd, #ffe4e6);
+            border-radius: 50% 50% 25% 25%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+
+        .jar::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            background: linear-gradient(145deg, #fff, #f8f9fa);
+            border-radius: 50% 50% 0 0;
+            border: 3px solid #ddd;
+        }
+
+        .wish {
+            position: absolute;
+            background: #fff3cd;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: floatUp 4s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(400px) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(200px) rotate(5deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(0deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Page 7 - Playlist */
+        .playlist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .song-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-bars {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .bar {
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(to top, #ff69b4, #ffb6c1);
+            border-radius: 2px;
+            animation: music 1.5s ease-in-out infinite;
+        }
+
+        .bar:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+        .bar:nth-child(3) { animation-delay: 0.2s; height: 25px; }
+        .bar:nth-child(4) { animation-delay: 0.3s; height: 35px; }
+        .bar:nth-child(5) { animation-delay: 0.4s; height: 28px; }
+
+        @keyframes music {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(2); }
+        }
+
+        /* Page 8 - Final */
+        .fireworks {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes fireworks {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page { padding: 10px; }
+            h1 { font-size: 3rem; }
+            .nav-btn { padding: 12px 24px; font-size: 14px; }
+        }
+
+        /* Hide all pages except active */
+        .page:not(.active) {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Config Section (Edit these values) -->
+    <script>
+        const CONFIG = {
+            name: "Priya", // Change the birthday person's name
+            birthDate: "1998-06-15", // YYYY-MM-DD format
+            letterMessage: "My dearest Priya,\n\nToday is your special day, and I want you to know how much you mean to me. Your smile lights up my world, your kindness touches everyone around you, and your beautiful heart makes every day better.\n\nYou've accomplished so much this year, and I'm so excited to see all the amazing things you'll do next. Here's to celebrating you - the most wonderful person I know!\n\nWith all my love,\nYour Secret Admirer 💖",
+            reasons: [
+                "Your laugh lights up every room",
+                "You have the kindest heart",
+                "Your determination inspires everyone",
+                "You make ordinary moments magical",
+                "Your creativity knows no bounds",
+                "You always know how to make me smile",
+                "Your strength is truly admirable",
+                "You light up every conversation",
+                "Your generosity touches everyone",
+                "You're simply unforgettable"
+            ],
+            songs: [
+                { title: "Perfect", artist: "Ed Sheeran" },
+                { title: "A Thousand Years", artist: "Christina Perri" },
+                { title: "Can't Help Falling in Love", artist: "Elvis Presley" },
+                { title: "Lover", artist: "Taylor Swift" },
+                { title: "Adore You", artist: "Harry Styles" }
+            ],
+            wishes: [
+                "May all your dreams come true 🌟",
+                "Wishing you endless joy and laughter 🎂",
+                "Health, happiness, and love always 💕",
+                "May every day bring new adventures ✨",
+                "You're destined for greatness! 🚀"
+            ]
+        };
+    </script>
+
+    <!-- Pages -->
+    <div id="page1" class="page active">
+        <h1 id="welcome-title">[Name]'s Special Day 🎂</h1>
+        <p style="font-size: 1.5rem; text-align: center; margin-bottom: 40px; color: #666;">
+            A little something made with love, just for you 💖
+        </p>
+        <div class="pulsing-heart">💖</div>
+        <button class="nav-btn" onclick="nextPage()">Enter</button>
+    </div>
+
+    <div id="page2" class="page">
+        <h2>Happy Birthday!</h2>
+        <div style="text-align: center; font-size: 1.3rem; color: #666; margin-bottom: 40px;">
+            You've been on this earth for
+        </div>
+        <div id="years" class="counter">0</div>
+        <div class="counter">years</div>
+        <div id="months" class="counter">0</div>
+        <div class="counter">months</div>
+        <div id="days" class="counter">0</div>
+        <div class="counter">days!</div>
+        <button class="nav-btn" onclick="nextPage()">Continue →</button>
+    </div>
+
+    <div id="page3" class="page">
+        <h2>Our Favorite Memories 📸</h2>
+        <div class="gallery" id="gallery">
+            <!-- Generated by JS -->
+        </div>
+        <button class="nav-btn" onclick="nextPage()">Next</button>
+    </div>
+
+    <div id="page4" class="page">
+        <h2>10 Reasons Why You're Amazing 💝</h2>
+        <div class="reasons-grid" id="reasons">
+            <!-- Generated by JS -->
+        </div>
+        <button class="nav-btn" onclick="nextPage()">Read My Letter →</button>
+    </div>
+
+    <div id="page5" class="page">
+        <h2>A Special Message For You 💌</h2>
+        <div class="letter-container">
+            <div id="letter-text" class="letter-text"></div>
+        </div>
+        <button class="nav-btn" onclick="nextPage()">Open Wishes Jar →</button>
+    </div>
+
+    <div id="page6" class="page">
+        <h2>Wishes Just For You 🫙</h2>
+        <div class="jar"></div>
+        <div id="wishes-container" style="margin-top: 30px;"></div>
+        <button class="nav-btn" onclick="nextPage()">Our Playlist →</button>
+    </div>
+
+    <div id="page7" class="page">
+        <h2>Songs That Remind Me Of You 🎵</h2>
+        <div class="playlist" id="playlist">
+            <!-- Generated by JS -->
+        </div>
+        <button class="nav-btn" onclick="nextPage()">Final Surprise →</button>
+    </div>
+
+    <div id="page8" class="page">
+        <h1>Happy Birthday, [Name]! 🎉</h1>
+        <p style="font-size: 1.5rem; text-align: center; margin: 30px 0; color: #666; max-width: 600px;">
+            Wishing you a day as wonderful as you are 💖
+        </p>
+        <button class="nav-btn" onclick="restart()">Replay from Start 🎂</button>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let heartInterval, sparkleInterval;
+
+        // Initialize
+        function init() {
+            updateWelcomeTitle();
+            calculateAge();
+            createGallery();
+            createReasons();
+            createPlaylist();
+            startAnimations();
+            setTimeout(() => showConfetti(), 500);
+        }
+
+        // Update welcome title with name
+        function updateWelcomeTitle() {
+            document.getElementById('welcome-title').textContent = `${CONFIG.name}'s Special Day 🎂`;
+            document.querySelector('#page8 h1').textContent = `Happy Birthday, ${CONFIG.name}! 🎉`;
+        }
+
+        // Calculate age
+        function calculateAge() {
+            const birthDate = new Date(CONFIG.birthDate);
+            const today = new Date();
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = months;
+            document.getElementById('days').textContent = days;
+        }
+
+        // Page navigation
+        function nextPage() {
+            document.getElementById(`page${currentPage}`).classList.remove('active');
+            currentPage++;
+            document.getElementById(`page${currentPage}`).classList.add('active');
+            
+            if (currentPage === 4) animateReasons();
+            if (currentPage === 5) typeLetter();
+            if (currentPage === 6) animateWishes();
+        }
+
+        function restart() {
+            currentPage = 1;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page1').classList.add('active');
+            location.reload(); // Simple restart
+        }
+
+        // Heart Rain
+        function startAnimations() {
+            heartInterval = setInterval(createHeart, 300);
+            sparkleInterval = setInterval(createSparkle, 800);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['❤️', '🩷', '💕'][Math.floor(Math.random() * 3)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (10 + Math.random() * 12) + 'px';
+            heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 10000);
+        }
+
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.innerHTML = '✨';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 6 + 's';
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => sparkle.remove(), 7000);
+        }
+
+        // Confetti
+        function showConfetti() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = ['#ff69b4', '#ffd700', '#98d8c8', '#ff9f9c', '#f8b500'][Math.floor(Math.random() * 5)];
+                    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // Gallery
+        function createGallery() {
+            const gallery = document.getElementById('gallery');
+            for (let i = 1; i <= 6; i++) {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <div>Memory ${i}</div>
+                    <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">Our adventure together...</div>
+                `;
+                gallery.appendChild(item);
+            }
+        }
+
+        // Reasons
+        function createReasons() {
+            const container = document.getElementById('reasons');
+            CONFIG.reasons.forEach((reason, index) => {
+                const card = document.createElement('div');
+                card.className = 'reason-card';
+                card.style.animationDelay = `${index * 0.2}s`;
+                card.innerHTML = `<div>${reason}</div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function animateReasons() {
+            const cards = document.querySelectorAll('.reason-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => card.classList.add('flipped'), index * 150);
+            });
+        }
+
+        // Letter typewriter
+        function typeLetter() {
+            const text = CONFIG.letterMessage;
+            const element = document.getElementById('letter-text');
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent = text.slice(0, i);
+                    i++;
+                    setTimeout(type, 50);
+                } else {
+                    element.style.borderRight = 'none';
+                }
+            }
+            type();
+        }
+
+        // Wishes
+        function animateWishes() {
+            const container = document.getElementById('wishes-container');
+            CONFIG.wishes.forEach((wish, index) => {
+                setTimeout(() => {
+                    const wishEl = document.createElement('div');
+                    wishEl.className = 'wish';
+                    wishEl.textContent = wish;
+                    wishEl.style.left = (20 + Math.random() * 60) + '%';
+                    wishEl.style.bottom = '20%';
+                    wishEl.style.animationDelay = '0.5s';
+                    document.querySelector('.jar').appendChild(wishEl);
+                    
+                    setTimeout(() => {
+                        container.appendChild(wishEl.cloneNode(true));
+                        wishEl.remove();
+                    }, 4000);
+                }, index * 800);
+            });
+        }
+
+        // Playlist
+        function createPlaylist() {
+            const container = document.getElementById('playlist');
+            CONFIG.songs.forEach((song, index) => {
+                const card = document.createElement('div');
+                card.className = 'song-card';
+                card.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 15px;">🎵</div>
+                    <div style="font-weight: 600; font-size: 1.2rem; margin-bottom: 5px;">${song.title}</div>
+                    <div style="color: #666; font-size: 1rem;">${song.artist}</div>
+                    <div class="music-bars">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Fireworks on final page
+        if (currentPage === 8) {
+            setTimeout(() => {
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const firework = document.createElement('div');
+                        firework.className = 'fireworks';
+                        firework.style.left = Math.random() * 100 + '%';
+                        firework.style.top = Math.random() * 100 + '%';
+                        firework.style.background = ['#ffd700', '#ff69b4', '#98d8c8', '#ff9f9c'][Math.floor(Math.random() * 4)];
+                        firework.style.animationDuration = (0.8 + Math.random() * 0.4) + 's';
+                        document.body.appendChild(firework);
+                        
+                        setTimeout(() => firework.remove(), 2000);
+                    }, i * 100);
+                }
+            }, 500);
+        }
+
+        // Start everything
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
